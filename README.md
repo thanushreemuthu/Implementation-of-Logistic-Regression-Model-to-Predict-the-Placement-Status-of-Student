@@ -16,111 +16,90 @@ To write a program to implement the the Logistic Regression Model to Predict the
 
 
 ## Program:
-```c
+```
 ## Developed by: Thanushree M
 ## RegisterNumber: 212224240169
 
 import pandas as pd
-data=pd.read_csv("Placement_Data.csv")
-data.head()
+import numpy as np
+import matplotlib.pyplot as plt
 
-data1=data.copy()
-data1=data1.drop(["sl_no","salary"],axis=1)#Browses the specified row or column
-data1.head()
+dataset = pd.read_csv('/content/Placement_Data.csv')
+dataset
 
-data1.isnull().sum()
+dataset.head()
 
-data1.duplicated().sum()
+dataset.info()
 
-from sklearn.preprocessing import LabelEncoder
-le=LabelEncoder()
-data1["gender"]=le.fit_transform(data1["gender"])
-data1["ssc_b"]=le.fit_transform(data1["ssc_b"])
-data1["hsc_b"]=le.fit_transform(data1["hsc_b"])
-data1["hsc_s"]=le.fit_transform(data1["hsc_s"])
-data1["degree_t"]=le.fit_transform(data1["degree_t"])
-data1["workex"]=le.fit_transform(data1["workex"])
-data1["specialisation"]=le.fit_transform(data1["specialisation"] )     
-data1["status"]=le.fit_transform(data1["status"])       
-data1 
+dataset=dataset.drop('sl_no',axis=1)
+dataset=dataset.drop('salary',axis=1)
 
-x=data1.iloc[:,:-1]
-x
+dataset.info()
 
-y=data1["status"]
-y
+dataset["gender"]=dataset["gender"].astype('category')
+dataset["ssc_b"]=dataset["ssc_b"].astype('category')
+dataset["hsc_b"]=dataset["hsc_b"].astype('category')
+dataset["degree_t"]=dataset["degree_t"].astype('category')
+dataset["workex"]=dataset["workex"].astype('category')
+dataset["specialisation"]=dataset["specialisation"].astype('category')
+dataset["status"]=dataset["status"].astype('category')
+dataset["hsc_s"]=dataset["hsc_s"].astype('category')
+dataset.dtypes
+
+dataset.info()
+
+dataset["gender"]=dataset["gender"].cat.codes
+dataset["ssc_b"]=dataset["ssc_b"].cat.codes
+dataset["hsc_b"]=dataset["hsc_b"].cat.codes
+dataset["degree_t"]=dataset["degree_t"].cat.codes
+dataset["workex"]=dataset["workex"].cat.codes
+dataset["specialisation"]=dataset["specialisation"].cat.codes
+dataset["status"]=dataset["status"].cat.codes
+dataset["hsc_s"]=dataset["hsc_s"].cat.codes
+dataset
+
+dataset.info()
+
+X=dataset.iloc[:,:-1].values
+Y=dataset.iloc[:,-1].values
+Y
 
 from sklearn.model_selection import train_test_split
-x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.2)
+dataset.head()
+
+X_train.shape
+Y_test.shape
 
 from sklearn.linear_model import LogisticRegression
-lr=LogisticRegression(solver="liblinear")
-clf.fit(x_train,y_train)
-y_pred=clf.predict(x_test)
-y_pred
+clf=LogisticRegression()
+clf.fit(X_train,Y_train)
+clf.score(X_test,Y_test)
 
-from sklearn.metrics import accuracy_score
-accuracy=accuracy_score(y_test,y_pred)
-accuracy
+y_pred=clf.predict(X_test)
+from sklearn.metrics import accuracy_score,confusion_matrix
+print(accuracy_score(y_pred,Y_test))
+print(confusion_matrix(y_pred,Y_test))
 
-from sklearn.metrics import confusion_matrix
-confusion=confusion_matrix(y_test,y_pred)
-confusion
-
-from sklearn.metrics import classification_report
-classification_report1 = classification_report(y_test,y_pred)
-print(classification_report1)
-
-clf.predict([[1,80,1,90,1,1,90,1,0,85,1,85]])
-
+clf.predict([[0,87,0,95,0,2,78,2,0,0,1,0]])
 
 ```
 ## Output:
-## Placement Data:
-
-![data](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/cba641d7-4b64-474a-9df3-f8047b4ddc21)
-
-## Salary Data:
-
-![salarydata](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/b69592e3-fb46-446d-87a4-60e8dabf45a1)
-
-## Checking the null() function:
-
-
-![null](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/196a08f0-0571-40f2-bfdf-b6e1d2b4fa8f)
-
-## Data Duplicate:
-
-
-![duplicate](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/3efb2a8c-6c60-4466-99b2-2c3c7b7a39b4)
-
-## Print Data:
-
-![dataprint](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/37d05f23-2187-49d2-a871-7dbf5d7baca9)
-
-
-## Data-Status:
-
-![datastatus](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/d0b24ebb-4d7a-4956-b6e5-b87f65ccbeeb)
-
-## Y_prediction array:
-![ypredict](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/81a5cd80-1fa0-48d8-a838-567b6e7a6676)
-
-## Accuracy value:
-![accuracy](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/1ca21819-8baa-4312-aae8-1b094fe75ea6)
-
-## Confusion array:
-
-![confusion](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/675efabe-006d-463a-b5f0-0cc4354ca37a)
-
-## Classification Report:
-
-
-![cr](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/be3ab929-d71c-492a-8adc-9a054cf08983)
-
-
-## Prediction of clf:
-![lrpredict](https://github.com/charumathiramesh/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/120204455/295b82c5-385c-4832-9d92-282a651946cb)
+![image](https://github.com/user-attachments/assets/28019a11-9867-4d98-8035-33cc1fa5568a)
+![image](https://github.com/user-attachments/assets/c7c44598-2964-4f50-9e9c-5e0cfca95bdc)
+![image](https://github.com/user-attachments/assets/fa63d4be-b4d0-4896-9491-102808f2e02e)
+![image](https://github.com/user-attachments/assets/194c9e97-125e-4b09-a6eb-cb8dc65353a4)
+![image](https://github.com/user-attachments/assets/d7425287-c142-40c1-b58c-c030f048ae48)
+![image](https://github.com/user-attachments/assets/04a42d8f-e259-40ab-82b6-013a6bdd055a)
+![image](https://github.com/user-attachments/assets/f9a87e63-f722-4479-97d0-a64cf41a186d)
+![image](https://github.com/user-attachments/assets/de20e15c-82db-4321-b0c4-cc11b31233c8)
+![image](https://github.com/user-attachments/assets/655a7515-7d60-48ec-a11d-1bc5f3228d20)
+![image](https://github.com/user-attachments/assets/4da0fef3-f988-488c-ab0a-06021dbec429)
+![image](https://github.com/user-attachments/assets/55ba77c2-32cb-4558-b96f-840f5754133f)
+![image](https://github.com/user-attachments/assets/21a9f5fe-134a-49fd-b12d-eee6a1da0a7f)
+![image](https://github.com/user-attachments/assets/c8843ccb-a9d1-4ba7-9e98-015f34ba2bc6)
+![image](https://github.com/user-attachments/assets/32398ae7-e15f-4c84-b41f-317568372f98)
+![image](https://github.com/user-attachments/assets/8fd78d37-0a46-4688-87c1-c9202c312f6a)
 
 
 ## Result:
